@@ -1,0 +1,12 @@
+{
+    "name": "todo-pwa",
+    "version": "1.0.0",
+    "main": "service/server.js",
+    "scripts": {
+      "start": "node service/server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2"
+    }
+  }
+  
