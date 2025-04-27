@@ -1,0 +1,54 @@
+
+services:
+  admin-server:
+    build:
+      context: ./admin-server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./admin-server:/app
+    environment:
+      - NODE_ENV=production
+
+  product-server:
+    build:
+      context: ./product-server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./product-server:/app
+    environment:
+      - NODE_ENV=production
+
+  graphql-server:
+    build:
+      context: ./graphql-server
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./graphql-server:/app
+    environment:
+      - NODE_ENV=production
+
+  websocket-server:
+    build:
+      context: ./websocket-server
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./websocket-server:/app
+    environment:
+      - NODE_ENV=production
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
