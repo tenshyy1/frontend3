@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интернет-магазин - Клиентская часть</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --accent-color: #FF9800;
+            --text-color: #333;
+            --light-bg: #f5f5f5;
+            --card-bg: #fff;
+            --border-color: #ddd;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        h1, h2, h3 {
+            margin: 0;
+        }
+        
+        .data-controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+        }
+        
+        /* Стили для каталога товаров */
+        .products-section {
+            flex: 2;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-info {
+            padding: 15px;
+        }
+        
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .product-price {
+            font-size: 16px;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .product-category {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--light-bg);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--text-color);
+        }
+        
+        /* Стили для чата */
+        .chat-section {
+            flex: 1;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            margin: 0;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 8px;
+            max-width: 80%;
+            word-break: break-word;
+        }
+        
+        .message-customer {
+            align-self: flex-end;
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .message-admin {
+            align-self: flex-start;
+            background-color: var(--light-bg);
+        }
+        
+        .message-system {
+            align-self: center;
+            background-color: var(--light-bg);
+            color: #666;
+            font-style: italic;
+            text-align: center;
+            font-size: 14px;
+            padding: 5px 10px;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--secondary-color);
+        }
+        
+        button {
+            padding: 8px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        button.secondary {
+            background-color: var(--secondary-color);
+        }
+        
+        button.secondary:hover {
+            background-color: #0b7dda;
+        }
+        
+        select, input[type="text"] {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        .user-info {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-info input {
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .view-modes {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        
+        .view-mode {
+            cursor: pointer;
+            padding: 8px 15px;
+            background-color: var(--light-bg);
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .view-mode:hover {
+            background-color: var(--border-color);
+        }
+        
+        .view-mode.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+      <div class="container">
+        <h1>Интернет-магазин</h1>
+        <div>
+          <button id="connect-chat" class="secondary">Подключиться к чату</button>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div class="main-content">
+        <div class="products-section">
+          <h2>Каталог товаров</h2>
+          <div id="products-container" class="products-grid">
+            <div class="loading">Загрузка товаров...</div>
+          </div>
+        </div>
+        
+        <div class="chat-section">
+          <div class="chat-header">
+            <h3>Чат с поддержкой</h3>
+            <div id="connection-status">Отключено</div>
+          </div>
+          <div id="chat-messages" class="chat-messages">
+            <div class="message message-system">
+              Добро пожаловать в чат поддержки. Нажмите "Подключиться к чату", чтобы начать общение.
+            </div>
+          </div>
+          <div class="chat-input">
+            <input type="text" id="message-input" placeholder="Введите сообщение..." disabled>
+            <button id="send-message" disabled>Отправить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script defer>
+        // DOM элементы
+        const connectChatBtn = document.getElementById('connect-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendMessageBtn = document.getElementById('send-message');
+        
+        // WebSocket переменные
+        let websocket = null;
+        let userId = 'customer_' + Math.random().toString(36).substr(2, 9);
+        
+        // Подключение к WebSocket
+        connectChatBtn.addEventListener('click', function() {
+            if (websocket && websocket.readyState === WebSocket.OPEN) {
+                websocket.close();
+            } else {
+                connectToChat();
+            }
+        });
+        
+        function connectToChat() {
+            websocket = new WebSocket('ws://localhost:5001/chat');
+            
+            websocket.onopen = () => {
+              document.getElementById('connection-status').textContent = 'Подключено';
+              document.getElementById('connection-status').style.color = '#4CAF50';
+              
+              // Активация элементов интерфейса чата
+              connectChatBtn.textContent = 'Отключиться от чата';
+              messageInput.disabled = false;
+              sendMessageBtn.disabled = false;
+              
+              // Добавление системного сообщения
+              addChatMessage({
+                type: 'message',
+                userType: 'system',
+                content: 'Вы подключились к чату поддержки.'
+              });
+              
+              // Отправка информации о пользователе
+              const username = 'Покупатель';
+              const message = {
+                type: 'connect',
+                userType: 'customer',
+                userId: userId,
+                username: username,
+                content: 'подключился к чату'
+              };
+              
+              websocket.send(JSON.stringify(message));
+            };
+            
+            websocket.onmessage = (event) => {
+              try {
+                const message = JSON.parse(event.data);
+                addChatMessage(message);
+              } catch (error) {
+                console.error('Ошибка при обработке сообщения:', error);
+              }
+            };
+            
+            websocket.onerror = (error) => {
+              console.error('WebSocket ошибка:', error);
+              addChatMessage({
+                type: 'message',
+                userType: 'system',
+                content: 'Ошибка соединения с чатом.'
+              });
+            };
+            
+            websocket.onclose = () => {
+              document.getElementById('connection-status').textContent = 'Отключено';
+              document.getElementById('connection-status').style.color = '';
+              
+              // Деактивация элементов интерфейса чата
+              connectChatBtn.textContent = 'Подключиться к чату';
+              messageInput.disabled = true;
+              sendMessageBtn.disabled = true;
+              
+              // Добавление системного сообщения
+              addChatMessage({
+                type: 'message',
+                userType: 'system',
+                content: 'Вы отключились от чата поддержки.'
+              });
+            };
+          }
+          
+          // Функция для отправки сообщения
+          function sendMessage() {
+            const content = messageInput.value.trim();
+            
+            if (content && websocket && websocket.readyState === WebSocket.OPEN) {
+              const message = {
+                type: 'message',
+                userType: 'customer',
+                userId: userId,
+                username: 'Покупатель',
+                content: content
+              };
+              
+              websocket.send(JSON.stringify(message));
+              messageInput.value = '';
+            }
+          }
+          
+          // Добавление сообщения в чат
+          function addChatMessage(message) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message message-${message.userType}`;
+            
+            if (message.userType === 'system') {
+              messageElement.textContent = message.content;
+            } else {
+              const isCurrentUser = message.userType === 'customer' && message.userId === userId;
+              const messageClass = isCurrentUser ? 'message-customer' : 'message-admin';
+              messageElement.className = `message ${messageClass}`;
+              
+              const header = document.createElement('div');
+              header.className = 'message-header';
+              
+              if (message.timestamp) {
+                const time = new Date(message.timestamp);
+                const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                header.textContent = `${message.username} • ${formattedTime}`;
+              } else {
+                header.textContent = message.username;
+              }
+              
+              const content = document.createElement('div');
+              content.textContent = message.content;
+              
+              messageElement.appendChild(header);
+              messageElement.appendChild(content);
+            }
+            
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+          
+          // Настройка обработчика для кнопки отправки
+          sendMessageBtn.addEventListener('click', sendMessage);
+          
+          // Отправка сообщения при нажатии Enter
+          messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+              sendMessage();
+            }
+          });
+        
+        // Константы для GraphQL и WebSocket серверов
+        const GRAPHQL_URL = 'http://localhost:4000/graphql';
+        let currentView = 'full'; // полное представление по умолчанию
+
+        // Функция для отправки GraphQL запросов
+        async function fetchGraphQL(query) {
+        const response = await fetch(GRAPHQL_URL, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ошибка: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.errors) {
+            throw new Error(result.errors[0].message);
+        }
+        
+        return result;
+        }
+
+        // Загрузка товаров через GraphQL
+        async function loadProducts() {
+        try {
+            console.log('Начинаем загрузку товаров в режиме:', currentView);
+            let query;
+            
+            if (currentView === 'basic') {
+            // Только название и цена
+            query = `
+                query {
+                productsBasicInfo {
+                    id
+                    name
+                    price
+                }
+                }
+            `;
+            } else if (currentView === 'detailed') {
+            // Название и описание
+            query = `
+                query {
+                productsWithDetails {
+                    id
+                    name
+                    description
+                    category {
+                    name
+                    }
+                }
+                }
+            `;
+            } else {
+            // Полное представление
+            query = `
+                query {
+                products {
+                    id
+                    name
+                    price
+                    description
+                    category {
+                    id
+                    name
+                    }
+                }
+                }
+            `;
+            }
+            
+            const result = await fetchGraphQL(query);
+            console.log('Ответ от сервера:', result);
+            
+            let products;
+            if (currentView === 'basic') {
+            products = result.data.productsBasicInfo;
+            } else if (currentView === 'detailed') {
+            products = result.data.productsWithDetails;
+            } else {
+            products = result.data.products;
+            }
+            
+            if (!products || products.length === 0) {
+            document.getElementById('products-container').innerHTML = '<div class="loading">Товары не найдены</div>';
+            return;
+            }
+            
+            displayProducts(products);
+        } catch (error) {
+            console.error('Ошибка при загрузке товаров:', error);
+            document.getElementById('products-container').innerHTML = 
+            `<div class="loading">Ошибка при загрузке товаров: ${error.message}</div>`;
+        }
+        }
+
+        // Отображение товаров
+        function displayProducts(products) {
+        const productsContainer = document.getElementById('products-container');
+        productsContainer.innerHTML = '';
+        
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            
+            let cardContent = '';
+            
+            if (currentView === 'basic') {
+            // Только название и цена
+            cardContent = `
+                <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">${product.price.toFixed(2)} ₽</div>
+                </div>
+            `;
+            } else if (currentView === 'detailed') {
+            // Название и описание
+            cardContent = `
+                <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-description">${product.description}</div>
+                ${product.category ? `<div class="product-category">${product.category.name}</div>` : ''}
+                </div>
+            `;
+            } else {
+            // Полное представление
+            cardContent = `
+                <div class="product-info">
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">${product.price.toFixed(2)} ₽</div>
+                <div class="product-description">${product.description}</div>
+                ${product.category ? `<div class="product-category">${product.category.name}</div>` : ''}
+                </div>
+            `;
+            }
+            
+            productCard.innerHTML = cardContent;
+            productsContainer.appendChild(productCard);
+        });
+        }
+
+        // Добавляем HTML для кнопок переключения представления
+        function addViewControls() {
+        const productsSection = document.querySelector('.products-section');
+        const h2 = productsSection.querySelector('h2');
+        
+        // Создаем панель управления представлением
+        const viewControls = document.createElement('div');
+        viewControls.className = 'data-controls';
+        viewControls.innerHTML = `
+            <div class="filter-bar">
+            <div class="view-modes">
+                <div class="view-mode active" id="view-full">Полное представление</div>
+                <div class="view-mode" id="view-basic">Базовая информация</div>
+                <div class="view-mode" id="view-detailed">Детальное описание</div>
+            </div>
+            </div>
+        `;
+        
+        // Вставляем после заголовка
+        h2.insertAdjacentElement('afterend', viewControls);
+        
+        // Добавляем обработчики событий для кнопок
+        document.getElementById('view-full').addEventListener('click', () => setView('full'));
+        document.getElementById('view-basic').addEventListener('click', () => setView('basic'));
+        document.getElementById('view-detailed').addEventListener('click', () => setView('detailed'));
+        }
+
+        // Функция для переключения представления
+        function setView(view) {
+        // Обновляем активный класс у кнопок
+        document.getElementById('view-full').classList.toggle('active', view === 'full');
+        document.getElementById('view-basic').classList.toggle('active', view === 'basic');
+        document.getElementById('view-detailed').classList.toggle('active', view === 'detailed');
+        
+        // Устанавливаем текущее представление
+        currentView = view;
+        
+        // Перезагружаем товары с новым представлением
+        loadProducts();
+        }
+
+        // Загрузка данных при загрузке страницы
+        window.addEventListener('DOMContentLoaded', async () => {
+        // Добавляем элементы управления представлением
+        addViewControls();
+        
+        // Загружаем товары
+        await loadProducts();
+        });
+    </script>
+
+  </body>
